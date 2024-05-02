@@ -1,0 +1,33 @@
+.productImage{
+    width: 80px;
+    height: 80px;
+}
+
+/* .productName{
+    max-width: 200px;
+} */
+.productName hr{
+    margin: 5px 0 !important;
+}
+.titleLink{
+    color: black;
+}
+
+.titleLink:hover{
+    color: #7367f0;
+}
+
+.updateBtn{
+    background: #7367f0;
+    color: #fff;
+    font-weight: 400;
+    border-radius: 4px;
+    border: none;
+}
+.manage_inventory{
+    font-size: 12px;
+}
+
+.inventoryTable{
+    overflow-y: hidden;
+}

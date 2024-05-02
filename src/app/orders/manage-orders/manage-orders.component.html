@@ -1,0 +1,238 @@
+<div class="content-overlay"></div>
+<div class="header-navbar-shadow"></div>
+<div class="content-wrapper p-0">
+  <div class="content-header row align-items-baseline">
+    <div class="content-header-left col-md-9 col-4 mb-2">
+      <div class="row breadcrumbs-top">
+        <div class="col-12">
+          <h2 class="content-header-title float-start mb-0">Orders</h2>
+          <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+
+              <li class="breadcrumb-item active">Orders</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row align-items-center" id="table-responsive">
+    <div class="col-12">
+      <div class="card">
+        <div class="d-md-flex justify-content-between align-items-center">
+          <div class="col-md-5 col-12">
+            <div class="p-1">
+              <span>Action : </span>
+              <input
+                type="submit"
+                class="btn btn-sm action_btn"
+                value="Confirm Shipment"
+              />
+              <input
+                type="submit"
+                class="btn btn-sm action_btn"
+                value="Print Packaging Slip"
+              />
+              <input
+                type="submit"
+                class="btn btn-sm action_btn"
+                value="Cancel Order"
+              />
+            </div>
+          </div>
+          <div class="col-sm-12 mx-1 col-11 col-md-6">
+            <div class="row justify-content-end">
+              <div class="col-3">
+                <select class="form-select form-select-sm search_range">
+                  <option selected>Date Range</option>
+                  <option value="">Last Day</option>
+                  <option value="">Last 7 Day</option>
+                  <option value="">Last 14 Day</option>
+                  <option value="">Last 30 Day</option>
+                  <option value="">Last 90 Day</option>
+                  <option value="">Last 180 Day</option>
+                  <option value="">Last 365 Day</option>
+                </select>
+              </div>
+              <div class="col-7 justify-items-end">
+                <div class="input-group input-group-merge">
+                  <span class="input-group-text" id="basic-addon-search2">
+                    <select class="form-select form-select-sm search_select">
+                      <option selected>Order ID</option>
+                      <option value="">Buyer Email</option>
+                      <option value="">Listing ID</option>
+                      <option value="">SKU</option>
+                      <option value="">Product Name</option>
+                      <option value="">Tracking ID</option>
+                    </select>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm search_box"
+                    placeholder="Search..."
+                    aria-label="Search..."
+                    aria-describedby="basic-addon-search2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body pt-0">
+          <div class="table-responsive">
+            <table class="table mb-0 ordersTable table-sm">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" name="" id="" /></th>
+                  <th scope="col" class="text-nowrap">Order Date</th>
+                  <th scope="col" class="text-nowrap">Order Details</th>
+                  <th scope="col" class="text-nowrap">Image</th>
+                  <th scope="col" class="text-nowrap">Product name</th>
+                  <th scope="col" class="text-nowrap">Status</th>
+                  <th scope="col" class="text-nowrap">Courior Details</th>
+                  <th scope="col" class="text-nowrap">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
+                  <td><input type="checkbox" name="" id="" /></td>
+                  <td>2022-06-06T10:58:52.612Z</td>
+                  <td>
+                    629dddec432e632c90dcf8fa Buyer name: test Payment Id:
+                    629dddec432e632c90dcf8f8
+                  </td>
+                  <td>Image</td>
+                  <td>
+                    Maybelline New York Super Stay Matte Ink Liquid Lipstick,
+                    Matte Finish, 5g - 20 Pioneer SKU: May-20 Pioneer Quantity:
+                    1 Total: ₹ 549
+                  </td>
+                  <td>Pending</td>
+                  <td>
+                    Select Couriour: <br />
+                    Tracking Id: <br />
+                    <button class="btn btn-sm">Submit</button>
+                  </td>
+                  <td>
+                    <input
+                      type="submit"
+                      class="btn btn-sm action_btn"
+                      value="Confirm Shipment"
+                    />
+                    <input
+                      type="submit"
+                      class="btn btn-sm action_btn"
+                      value="Print Packaging Slip"
+                    />
+                    <input
+                      type="submit"
+                      class="btn btn-sm action_btn"
+                      value="Cancel Order"
+                    />
+                  </td>
+                </tr> -->
+                <tr *ngFor="let order of ordersdata">
+                  <td>
+                    <input type="checkbox" name="" id="" />
+                  </td>
+                  <td>
+                    {{ order.createdAt }}
+                  </td>
+                  <td>
+                    {{ order._id }}
+                    <br />
+                    <b>Buyer name:</b> {{ order.user.name }} <br />
+                    <b>Payment Id:</b> {{ order.payment_id }}
+                  </td>
+                  <td>
+                    <img
+                      src="{{ order.currentProduct.banner }}"
+                      alt=""
+                      width="100"
+                    />
+                  </td>
+                  <td>
+                    {{ order.currentProduct.title }}<br />
+                    <b>SKU: </b>{{ order.currentProduct.sku }} <br />
+                    <b>Quantity: </b>{{ order.product.quantity }} <br />
+                    <b>Total: </b>₹ {{ order.sellingAmount }}
+                  </td>
+                  <td>
+                    {{ order.status }}
+                  </td>
+                  <td>
+                    <ng-container
+                      *ngIf="order.status == 'Pending'; else orderDetails"
+                    >
+                      <form
+                        #couriorSelectForm="ngForm"
+                        (ngSubmit)="
+                          updateOrderCourior(couriorSelectForm, order._id)
+                        "
+                        class="needs-validation"
+                      >
+                        <label
+                          >Select Couriour:
+                          <select
+                            required
+                            id="id"
+                            #id="ngModel"
+                            name="id"
+                            ngModel
+                          >
+                            <option value="">Select Courior</option>
+                            <ng-container *ngFor="let courior of couriors">
+                              <option value="{{ courior._id }}">
+                                {{ courior.name }}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </label>
+                        <label class="mt-1"
+                          >Tracking Id:
+                          <input
+                            type="text"
+                            required
+                            #trackingId="ngModel"
+                            name="trackingId"
+                            ngModel
+                            class="form-control"
+                            placeholder="Enter Title"
+                          />
+                        </label>
+                        <button type="submit" class="mt-1">Submit</button>
+                      </form>
+                    </ng-container>
+                    <ng-template #orderDetails>
+                      <b>Tracking Id:</b> {{ order.courier.trackingId }} <br />
+                      <b>Courior Name:</b> {{ order.courier.id.name }}
+                    </ng-template>
+                  </td>
+                  <td>
+                    <input
+                      type="submit"
+                      class="btn btn-sm action_btn"
+                      value="Confirm Shipment"
+                    />
+                    <input
+                      type="submit"
+                      class="btn btn-sm action_btn"
+                      value="Print Packaging Slip"
+                    />
+                    <input
+                      type="submit"
+                      class="btn btn-sm action_btn"
+                      value="Cancel Order"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
